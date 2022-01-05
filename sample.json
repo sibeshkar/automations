@@ -1,0 +1,294 @@
+[
+  {
+    "id": "195d43076d765a39",
+    "type": "tab",
+    "label": "Flow 1",
+    "disabled": false,
+    "info": "",
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "cbf91865fd86bdfd",
+    "type": "maya-browser-find-tab",
+    "z": "195d43076d765a39",
+    "name": "",
+    "isProfileConfigNode": false,
+    "query": "tab.urlQuery",
+    "payloadTypequery": "msg",
+    "x": 200,
+    "y": 200,
+    "wires": [
+      [
+        "6af0160e3ba97271"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "6af0160e3ba97271",
+    "type": "switch",
+    "z": "195d43076d765a39",
+    "name": "",
+    "property": "tabs.length",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "0",
+        "vt": "str"
+      },
+      {
+        "t": "gt",
+        "v": "0",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 230,
+    "y": 280,
+    "wires": [
+      [
+        "e55cf2eafc5cb35b"
+      ],
+      [
+        "be990370cc1beab9"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "e55cf2eafc5cb35b",
+    "type": "maya-browser-open",
+    "z": "195d43076d765a39",
+    "name": "",
+    "isProfileConfigNode": false,
+    "url": "tab.exactUrl",
+    "payloadTypeurl": "msg",
+    "additionalOptions": "{}",
+    "payloadTypeadditionalOptions": "json",
+    "x": 370,
+    "y": 260,
+    "wires": [
+      [
+        "86435de8d7d25c29"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "10421ac92f9de71f",
+    "type": "function",
+    "z": "195d43076d765a39",
+    "name": "",
+    "func": "msg.tab = {}\nmsg.tab.exactUrl = 'https://coinmarketcap.com/'\nmsg.tab.urlQuery = {\"url\":\"*://*.coinmarketcap.com/\"}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 100,
+    "y": 140,
+    "wires": [
+      [
+        "cbf91865fd86bdfd"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "86435de8d7d25c29",
+    "type": "delay",
+    "z": "195d43076d765a39",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "3",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "x": 450,
+    "y": 320,
+    "wires": [
+      [
+        "be990370cc1beab9"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "031b6094d9795dd9",
+    "type": "inject",
+    "z": "195d43076d765a39",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payloadType": "date",
+    "x": 140,
+    "y": 60,
+    "wires": [
+      [
+        "10421ac92f9de71f"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "be990370cc1beab9",
+    "type": "maya-browser-query",
+    "z": "195d43076d765a39",
+    "name": "",
+    "options": [
+      {
+        "key": "name",
+        "xpath": "/html/body/div/div/div[1]/div[2]/div/div[1]/div[5]/table/tbody//td[3]/div/a/div/div/div/p",
+        "extract": "/text()"
+      },
+      {
+        "key": "price",
+        "xpath": "/html/body/div[1]/div/div[1]/div[2]/div/div[1]/div[5]/table/tbody//td[4]/div/a/span",
+        "extract": "/text()"
+      },
+      {
+        "key": "mcap",
+        "xpath": "/html/body/div[1]/div/div[1]/div[2]/div/div[1]/div[5]/table/tbody//td[7]/p/span[2]",
+        "extract": "/text()"
+      },
+      {
+        "key": "volume",
+        "xpath": "/html/body/div[1]/div/div[1]/div[2]/div/div[1]/div[5]/table/tbody//td[8]/div/a/p",
+        "extract": "/text()"
+      }
+    ],
+    "tabId": "tabs[0].id",
+    "payloadTypeTabId": "msg",
+    "timeout": 5000,
+    "payloadTypeTimeout": "num",
+    "mergeOutputs": true,
+    "x": 310,
+    "y": 420,
+    "wires": [
+      [
+        "4acf5bdcfc565f49"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "4acf5bdcfc565f49",
+    "type": "change",
+    "z": "195d43076d765a39",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "result",
+        "tot": "msg"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 640,
+    "y": 380,
+    "wires": [
+      [
+        "4852ee51ff492526"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "4852ee51ff492526",
+    "type": "csv",
+    "z": "195d43076d765a39",
+    "name": "",
+    "sep": ",",
+    "hdrin": "",
+    "hdrout": "none",
+    "multi": "one",
+    "ret": "\\n",
+    "temp": "name,price, mcap, volume",
+    "skip": "0",
+    "strings": true,
+    "include_empty_strings": "",
+    "include_null_values": "",
+    "x": 720,
+    "y": 460,
+    "wires": [
+      [
+        "c71c66462fc8efb3",
+        "97daccd8e05008e4"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "c71c66462fc8efb3",
+    "type": "debug",
+    "z": "195d43076d765a39",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 730,
+    "y": 540,
+    "wires": [],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "97daccd8e05008e4",
+    "type": "file",
+    "z": "195d43076d765a39",
+    "name": "",
+    "filename": "/Users/sibeshkar/coins.csv",
+    "appendNewline": true,
+    "createDir": true,
+    "overwriteFile": "false",
+    "encoding": "none",
+    "x": 920,
+    "y": 420,
+    "wires": [
+      []
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  }
+]
