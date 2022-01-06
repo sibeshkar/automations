@@ -1,0 +1,593 @@
+[
+  {
+    "id": "ca3d3c7890230c4c",
+    "type": "subflow",
+    "name": "Scrape Algorand",
+    "info": "",
+    "category": "",
+    "in": [
+      {
+        "x": 80,
+        "y": 120,
+        "wires": [
+          {
+            "id": "c01db5c4dd794619"
+          }
+        ]
+      }
+    ],
+    "out": [
+      {
+        "x": 1460,
+        "y": 120,
+        "wires": [
+          {
+            "id": "2ad7e59339a1b00f",
+            "port": 0
+          }
+        ]
+      }
+    ],
+    "env": [],
+    "meta": {},
+    "color": "#FFF0F0",
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "c1d6927d05149afa",
+    "type": "delay",
+    "z": "ca3d3c7890230c4c",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "5",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "x": 560,
+    "y": 180,
+    "wires": [
+      [
+        "d47e207522251ef4"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "c01db5c4dd794619",
+    "type": "maya-browser-find-tab",
+    "z": "ca3d3c7890230c4c",
+    "name": "",
+    "isProfileConfigNode": false,
+    "query": "{\"url\":\"https://algoexplorer.io/*\"}",
+    "payloadTypequery": "json",
+    "x": 200,
+    "y": 120,
+    "wires": [
+      [
+        "dc92c42d314d356d"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "dc92c42d314d356d",
+    "type": "switch",
+    "z": "ca3d3c7890230c4c",
+    "name": "",
+    "property": "tabs.length",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gt",
+        "v": "0",
+        "vt": "num"
+      },
+      {
+        "t": "else"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 340,
+    "y": 120,
+    "wires": [
+      [
+        "d47e207522251ef4"
+      ],
+      [
+        "bebe1ee214b9e859"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "bebe1ee214b9e859",
+    "type": "maya-browser-open",
+    "z": "ca3d3c7890230c4c",
+    "name": "",
+    "isProfileConfigNode": false,
+    "url": "https://algoexplorer.io/",
+    "payloadTypeurl": "str",
+    "additionalOptions": "{\"active\":false}",
+    "payloadTypeadditionalOptions": "json",
+    "x": 410,
+    "y": 180,
+    "wires": [
+      [
+        "c1d6927d05149afa"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "d47e207522251ef4",
+    "type": "maya-browser-type",
+    "z": "ca3d3c7890230c4c",
+    "name": "",
+    "isProfileConfigNode": false,
+    "selector": "//*[@id='search-web']",
+    "payloadTypeselector": "str",
+    "timeout": "2000",
+    "payloadTypetimeout": "num",
+    "tabId": "tabs[0].id",
+    "payloadTypetabId": "msg",
+    "index": "0",
+    "payloadTypeindex": "num",
+    "content": "payload.address",
+    "payloadTypecontent": "msg",
+    "x": 730,
+    "y": 120,
+    "wires": [
+      [
+        "0d98d76036237dcf"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "2e56a532e08e826e",
+    "type": "maya-browser-click",
+    "z": "ca3d3c7890230c4c",
+    "name": "",
+    "isProfileConfigNode": false,
+    "delay": "100",
+    "payloadTypedelay": "num",
+    "clickType": "click",
+    "highlightDuration": "1000",
+    "payloadTypehighlightDuration": "num",
+    "selector": "//*[@data-cy='searchDesktop']",
+    "payloadTypeselector": "str",
+    "timeout": "2000",
+    "payloadTypetimeout": "num",
+    "tabId": "tabs[0].id",
+    "payloadTypetabId": "msg",
+    "index": "0",
+    "payloadTypeindex": "num",
+    "x": 1010,
+    "y": 120,
+    "wires": [
+      [
+        "a1d3fafcb3a6761d"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "0d98d76036237dcf",
+    "type": "delay",
+    "z": "ca3d3c7890230c4c",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "300",
+    "timeoutUnits": "milliseconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "x": 870,
+    "y": 120,
+    "wires": [
+      [
+        "2e56a532e08e826e"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "a1d3fafcb3a6761d",
+    "type": "delay",
+    "z": "ca3d3c7890230c4c",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "6",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "x": 1160,
+    "y": 120,
+    "wires": [
+      [
+        "2ad7e59339a1b00f"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "2ad7e59339a1b00f",
+    "type": "maya-browser-query",
+    "z": "ca3d3c7890230c4c",
+    "name": "",
+    "options": [
+      {
+        "key": "balance",
+        "xpath": "//span[@class='Address_selectBalanceTogle__UeVQs Address_selectBalanceTogleAlgos__1nZCm']",
+        "extract": "/text()"
+      },
+      {
+        "key": "rewards",
+        "xpath": "//span[@class='paper-value align-left Address_rewardsSize__5TJ44 with-algo']",
+        "extract": "/text()"
+      }
+    ],
+    "tabId": "tabs[0].id",
+    "payloadTypeTabId": "msg",
+    "timeout": 5000,
+    "payloadTypeTimeout": "num",
+    "mergeOutputs": false,
+    "x": 1310,
+    "y": 120,
+    "wires": [
+      [
+        "8327d277b7d6fe2a"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "8327d277b7d6fe2a",
+    "type": "debug",
+    "z": "ca3d3c7890230c4c",
+    "name": "Balance",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1440,
+    "y": 200,
+    "wires": [],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "51626234.8082cc",
+    "type": "tab",
+    "label": "Algorand",
+    "disabled": false,
+    "info": "",
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "71304df27437c86c",
+    "type": "function",
+    "z": "51626234.8082cc",
+    "name": "",
+    "func": "var arr = msg.payload.split(\"\\n\");\narr.pop();\nvar payload = [];\nfor(let address of arr){\n    payload.push({\n        \"url\": \"https://algoexplorer.io/address/\" + address,\n        \"address\": address\n    });\n}\n\nmsg.payload = payload;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 620,
+    "y": 320,
+    "wires": [
+      [
+        "4aa313cf268c69ce"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "33338b7da8b006cb",
+    "type": "csv",
+    "z": "51626234.8082cc",
+    "name": "",
+    "sep": ",",
+    "hdrin": true,
+    "hdrout": "once",
+    "multi": "one",
+    "ret": "\\n",
+    "temp": "address,balance,rewards",
+    "skip": "0",
+    "strings": true,
+    "include_empty_strings": "",
+    "include_null_values": "",
+    "x": 1110,
+    "y": 200,
+    "wires": [
+      [
+        "93b2d14c776aff78"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "57547224fa5703b9",
+    "type": "file",
+    "z": "51626234.8082cc",
+    "name": "File output",
+    "filename": "",
+    "appendNewline": false,
+    "createDir": false,
+    "overwriteFile": "false",
+    "encoding": "none",
+    "x": 1450,
+    "y": 200,
+    "wires": [
+      [
+        "4aa313cf268c69ce"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "4aa313cf268c69ce",
+    "type": "Serial Iterator",
+    "z": "51626234.8082cc",
+    "name": "",
+    "property": "payload",
+    "inputFlow": "input",
+    "saveOutput": 0,
+    "recursive": 0,
+    "storeId": 0,
+    "x": 850,
+    "y": 320,
+    "wires": [
+      [
+        "918b49a8c0363e82"
+      ],
+      [
+        "bb16c28af5f0ef1c"
+      ]
+    ],
+    "module": "node-red-contrib-serial-iterator",
+    "version": "0.1.3"
+  },
+  {
+    "id": "8a0ce4df8b940284",
+    "type": "comment",
+    "z": "51626234.8082cc",
+    "name": "Step 2",
+    "info": "Change export filename to a custom path",
+    "x": 1250,
+    "y": 160,
+    "wires": [],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "93b2d14c776aff78",
+    "type": "change",
+    "z": "51626234.8082cc",
+    "name": "CSV file path",
+    "rules": [
+      {
+        "t": "set",
+        "p": "filename",
+        "pt": "msg",
+        "to": "/home/maverick/algorand/wallets.csv",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1270,
+    "y": 200,
+    "wires": [
+      [
+        "57547224fa5703b9"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "cbe86e0ee836be32",
+    "type": "function",
+    "z": "51626234.8082cc",
+    "name": "",
+    "func": "var balance = null, rewards = null;\n\nif(msg.result.balance && msg.result.balance.length > 0 && msg.result.balance[0].length > 0){\n    balance = msg.result.balance[0].substring(1);\n    balance = parseFloat(balance.replace(/,/g, ''));\n}\n\nif(msg.result.rewards && msg.result.rewards.length > 0 && msg.result.rewards[0].length > 0){\n    rewards = msg.result.rewards[0].substring(1);\n    rewards = parseFloat(rewards.replace(/,/g, ''));\n}\n\nmsg.result.address = msg.payload.address;\nmsg.result.balance = balance;\nmsg.result.rewards = rewards;\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 780,
+    "y": 200,
+    "wires": [
+      [
+        "1ff12c12d949b270"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "1ff12c12d949b270",
+    "type": "change",
+    "z": "51626234.8082cc",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "result",
+        "tot": "msg"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 960,
+    "y": 200,
+    "wires": [
+      [
+        "33338b7da8b006cb"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "55647c871d60a1b6",
+    "type": "bot-command",
+    "z": "51626234.8082cc",
+    "name": "",
+    "order": 0,
+    "options": [
+      {
+        "value": "Get Algorand wallet status",
+        "type": "prompt",
+        "required": true
+      }
+    ],
+    "formValue": {
+      "Get Algorand wallet status": ""
+    },
+    "payload": "",
+    "endpointUrl": "/command-55647c871d60a1b6",
+    "icon": "",
+    "x": 150,
+    "y": 320,
+    "wires": [
+      [
+        "9391574094884355",
+        "be7484c9b465e5ce"
+      ]
+    ],
+    "module": "maya-red-bot-utils",
+    "version": "1.0.1"
+  },
+  {
+    "id": "be7484c9b465e5ce",
+    "type": "bot-response",
+    "z": "51626234.8082cc",
+    "name": "bot-response",
+    "status": "success",
+    "statusMsg": "Success!",
+    "statusMsgType": "str",
+    "x": 170,
+    "y": 420,
+    "wires": [],
+    "module": "maya-red-bot-utils",
+    "version": "1.0.1"
+  },
+  {
+    "id": "9391574094884355",
+    "type": "file in",
+    "z": "51626234.8082cc",
+    "name": "Export list of addresses",
+    "filename": "/home/maverick/algorand/address.csv",
+    "format": "utf8",
+    "chunk": false,
+    "sendError": false,
+    "encoding": "none",
+    "allProps": false,
+    "x": 400,
+    "y": 320,
+    "wires": [
+      [
+        "71304df27437c86c"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "918b49a8c0363e82",
+    "type": "subflow:ca3d3c7890230c4c",
+    "z": "51626234.8082cc",
+    "name": "",
+    "env": [],
+    "x": 600,
+    "y": 200,
+    "wires": [
+      [
+        "cbe86e0ee836be32"
+      ]
+    ],
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "3a9fbab1c729813c",
+    "type": "comment",
+    "z": "51626234.8082cc",
+    "name": "Step 1",
+    "info": "Change import filename to a custom path",
+    "x": 350,
+    "y": 280,
+    "wires": [],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "bb16c28af5f0ef1c",
+    "type": "maya-browser-close-tabs",
+    "z": "51626234.8082cc",
+    "name": "",
+    "isProfileConfigNode": false,
+    "action": "Close",
+    "timeout": "2000",
+    "payloadTypetimeout": "num",
+    "tabIds": "tabs",
+    "payloadTypetabIds": "msg",
+    "x": 1120,
+    "y": 400,
+    "wires": [
+      []
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  }
+]
