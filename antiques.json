@@ -1,0 +1,864 @@
+[
+  {
+    "id": "1b88befdab2dfaf6",
+    "type": "tab",
+    "label": "Antique Scraper",
+    "disabled": false,
+    "info": "",
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "c3da65e8558c6f7a",
+    "type": "subflow",
+    "name": "Get map search results for query",
+    "info": "",
+    "category": "",
+    "in": [
+      {
+        "x": 60,
+        "y": 120,
+        "wires": [
+          {
+            "id": "aa3b1ff81a66748c"
+          }
+        ]
+      }
+    ],
+    "out": [
+      {
+        "x": 1000,
+        "y": 160,
+        "wires": [
+          {
+            "id": "92ab8d2a43554ddc",
+            "port": 0
+          }
+        ]
+      }
+    ],
+    "env": [],
+    "meta": {},
+    "color": "#DDAA99",
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "5acdd1d873b644ba",
+    "type": "subflow",
+    "name": "Scrape location data from link",
+    "info": "",
+    "category": "",
+    "in": [
+      {
+        "x": 140,
+        "y": 80,
+        "wires": [
+          {
+            "id": "aebb129bbe470c02"
+          }
+        ]
+      }
+    ],
+    "out": [
+      {
+        "x": 1080,
+        "y": 180,
+        "wires": [
+          {
+            "id": "62b592e80fe5012b",
+            "port": 0
+          }
+        ]
+      }
+    ],
+    "env": [],
+    "meta": {},
+    "color": "#DDAA99",
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "b0e6fbfb60780838",
+    "type": "subflow",
+    "name": "Get location data for search query",
+    "info": "",
+    "category": "",
+    "in": [
+      {
+        "x": 140,
+        "y": 140,
+        "wires": [
+          {
+            "id": "9667832ec3274368"
+          }
+        ]
+      }
+    ],
+    "out": [
+      {
+        "x": 1120,
+        "y": 260,
+        "wires": [
+          {
+            "id": "b6feb737cdb9ff1f",
+            "port": 0
+          }
+        ]
+      }
+    ],
+    "env": [],
+    "meta": {},
+    "color": "#DDAA99",
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "b917f33dfb436915",
+    "type": "maya-browser-scrape",
+    "z": "5acdd1d873b644ba",
+    "name": "Scrape location data",
+    "isProfileConfigNode": false,
+    "query": "{\"name\":\"//h1[contains(@class, 'title')]/span[not(@class)]//text()\",\"rating\":\"//ol/../span/text()\",\"numReviews\":\"//button[contains(@aria-label, 'reviews') and contains(text(), 'reviews')]//text()\",\"address\":\"//img[contains(@src, 'place_gm')]/../../../../@aria-label\",\"timings\":\"//img[@aria-label='Hours']/../../div[@aria-label]/@aria-label\"}",
+    "payloadTypequery": "json",
+    "timeout": "2000",
+    "payloadTypetimeout": "num",
+    "tabId": "tabs[0].id",
+    "payloadTypetabId": "msg",
+    "x": 560,
+    "y": 180,
+    "wires": [
+      [
+        "8a37c4ee715ff236"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "1771d58120ed03d7",
+    "type": "maya-browser-query",
+    "z": "c3da65e8558c6f7a",
+    "name": "Scrape search results",
+    "options": [
+      {
+        "key": "link",
+        "xpath": "//div[contains(@aria-label, 'Results for')]//a",
+        "extract": "/@href"
+      },
+      {
+        "key": "name",
+        "xpath": "//div[contains(@aria-label, 'Results for')]//a/@aria-label",
+        "extract": ""
+      }
+    ],
+    "tabId": "tabs[0].id",
+    "payloadTypeTabId": "msg",
+    "timeout": 5000,
+    "payloadTypeTimeout": "num",
+    "mergeOutputs": true,
+    "x": 580,
+    "y": 160,
+    "wires": [
+      [
+        "92ab8d2a43554ddc"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "142041a01824b825",
+    "type": "maya-browser-open",
+    "z": "c3da65e8558c6f7a",
+    "name": "Search on Google Maps",
+    "isProfileConfigNode": false,
+    "url": "searchUrl",
+    "payloadTypeurl": "msg",
+    "additionalOptions": "{}",
+    "payloadTypeadditionalOptions": "json",
+    "x": 400,
+    "y": 80,
+    "wires": [
+      [
+        "686cf1f27757f292"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "aa3b1ff81a66748c",
+    "type": "function",
+    "z": "c3da65e8558c6f7a",
+    "name": "",
+    "func": "msg.searchUrl = `https://google.com/maps/search/${encodeURIComponent(msg.searchQuery)}`\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 200,
+    "y": 120,
+    "wires": [
+      [
+        "142041a01824b825"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "686cf1f27757f292",
+    "type": "delay",
+    "z": "c3da65e8558c6f7a",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "3",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "x": 380,
+    "y": 160,
+    "wires": [
+      [
+        "1771d58120ed03d7"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "371e0ba8cd9234fe",
+    "type": "bot-command",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "order": 0,
+    "options": [
+      {
+        "value": "Scrape shops in USA",
+        "type": "prompt",
+        "required": true
+      }
+    ],
+    "formValue": {
+      "Scrape shops in USA": ""
+    },
+    "payload": "",
+    "endpointUrl": "/command-371e0ba8cd9234fe",
+    "icon": "",
+    "x": 130,
+    "y": 320,
+    "wires": [
+      [
+        "90f6877cdc7275bf"
+      ]
+    ],
+    "module": "maya-red-bot-utils",
+    "version": "1.0.1"
+  },
+  {
+    "id": "92ab8d2a43554ddc",
+    "type": "maya-browser-close-tabs",
+    "z": "c3da65e8558c6f7a",
+    "name": "",
+    "isProfileConfigNode": false,
+    "action": "Close",
+    "timeout": "2000",
+    "payloadTypetimeout": "num",
+    "tabIds": "tabs",
+    "payloadTypetabIds": "msg",
+    "x": 850,
+    "y": 160,
+    "wires": [
+      []
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "9667832ec3274368",
+    "type": "subflow:c3da65e8558c6f7a",
+    "z": "b0e6fbfb60780838",
+    "name": "",
+    "env": [],
+    "x": 450,
+    "y": 160,
+    "wires": [
+      [
+        "1cbeb370841b6c73"
+      ]
+    ],
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "8a37c4ee715ff236",
+    "type": "function",
+    "z": "5acdd1d873b644ba",
+    "name": "Clean location data",
+    "func": "const result = msg.scrapeResult\n\n\ntry {\n    const cleanTimings = result.timings.replace('Hide open hours for the week', '').replace('.', '').split('; ').join('\\n')\n    result.timings = cleanTimings\n} catch (e) {\n    // do nothing\n}\n\nlet cleanNumReviews = 0\ntry {\n    cleanNumReviews = parseInt(result.numReviews.split(' ')[0])\n    result.numReviews = cleanNumReviews\n} catch (e) {\n    // do nothing\n}\n\n\ntry {\n    result.address = result.address.replace('Address: ', '')\n} catch (e) {\n    // do nothing\n}\n\nmsg.locationData = result\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 550,
+    "y": 220,
+    "wires": [
+      [
+        "62b592e80fe5012b"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "aebb129bbe470c02",
+    "type": "maya-browser-open",
+    "z": "5acdd1d873b644ba",
+    "name": "Open location webpage",
+    "isProfileConfigNode": false,
+    "url": "link",
+    "payloadTypeurl": "msg",
+    "additionalOptions": "{\"active\":false}",
+    "payloadTypeadditionalOptions": "json",
+    "x": 330,
+    "y": 80,
+    "wires": [
+      [
+        "de4c0cb702952b07"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "62b592e80fe5012b",
+    "type": "maya-browser-close-tabs",
+    "z": "5acdd1d873b644ba",
+    "name": "Close location webpage",
+    "isProfileConfigNode": false,
+    "action": "Close",
+    "timeout": "2000",
+    "payloadTypetimeout": "num",
+    "tabIds": "tabs",
+    "payloadTypetabIds": "msg",
+    "x": 870,
+    "y": 180,
+    "wires": [
+      []
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "44b4ecc772a1323b",
+    "type": "subflow:5acdd1d873b644ba",
+    "z": "b0e6fbfb60780838",
+    "name": "",
+    "env": [],
+    "x": 860,
+    "y": 340,
+    "wires": [
+      [
+        "b634681c60624313"
+      ]
+    ],
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "b6feb737cdb9ff1f",
+    "type": "switch",
+    "z": "b0e6fbfb60780838",
+    "name": "",
+    "property": "idx",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "result.length",
+        "vt": "msg"
+      },
+      {
+        "t": "lt",
+        "v": "result.length",
+        "vt": "msg"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 750,
+    "y": 240,
+    "wires": [
+      [],
+      [
+        "953e288aa71b7fd1"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "953e288aa71b7fd1",
+    "type": "function",
+    "z": "b0e6fbfb60780838",
+    "name": "",
+    "func": "msg.link = msg.result[msg.idx].link\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 760,
+    "y": 280,
+    "wires": [
+      [
+        "44b4ecc772a1323b"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "1cbeb370841b6c73",
+    "type": "change",
+    "z": "b0e6fbfb60780838",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "idx",
+        "pt": "msg",
+        "to": "0",
+        "tot": "num"
+      },
+      {
+        "t": "set",
+        "p": "locations",
+        "pt": "msg",
+        "to": "[]",
+        "tot": "json"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 560,
+    "y": 240,
+    "wires": [
+      [
+        "b6feb737cdb9ff1f"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "b634681c60624313",
+    "type": "function",
+    "z": "b0e6fbfb60780838",
+    "name": "",
+    "func": "msg.locations.push(msg.locationData)\n\nmsg.idx += 1\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 540,
+    "y": 480,
+    "wires": [
+      [
+        "b6feb737cdb9ff1f"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "de4c0cb702952b07",
+    "type": "delay",
+    "z": "5acdd1d873b644ba",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "2",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "x": 520,
+    "y": 120,
+    "wires": [
+      [
+        "b917f33dfb436915"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "60d351d4a7e0adcc",
+    "type": "subflow:b0e6fbfb60780838",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "env": [],
+    "x": 800,
+    "y": 780,
+    "wires": [
+      [
+        "1c831e4cd2a5f80c"
+      ]
+    ],
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "90f6877cdc7275bf",
+    "type": "change",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "usaStates",
+        "pt": "msg",
+        "to": "[\"Alabama\",\"Alaska\",\"American Samoa\",\"Arizona\",\"Arkansas\",\"California\",\"Colorado\",\"Connecticut\",\"Delaware\",\"District Of Columbia\",\"Federated States Of Micronesia\",\"Florida\",\"Georgia\",\"Guam\",\"Hawaii\",\"Idaho\",\"Illinois\",\"Indiana\",\"Iowa\",\"Kansas\",\"Kentucky\",\"Louisiana\",\"Maine\",\"Marshall Islands\",\"Maryland\",\"Massachusetts\",\"Michigan\",\"Minnesota\",\"Mississippi\",\"Missouri\",\"Montana\",\"Nebraska\",\"Nevada\",\"New Hampshire\",\"New Jersey\",\"New Mexico\",\"New York\",\"North Carolina\",\"North Dakota\",\"Northern Mariana Islands\",\"Ohio\",\"Oklahoma\",\"Oregon\",\"Palau\",\"Pennsylvania\",\"Puerto Rico\",\"Rhode Island\",\"South Carolina\",\"South Dakota\",\"Tennessee\",\"Texas\",\"Utah\",\"Vermont\",\"Virgin Islands\",\"Virginia\",\"Washington\",\"West Virginia\",\"Wisconsin\",\"Wyoming\"]",
+        "tot": "json"
+      },
+      {
+        "t": "set",
+        "p": "stateIdx",
+        "pt": "msg",
+        "to": "0",
+        "tot": "num"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 220,
+    "y": 380,
+    "wires": [
+      [
+        "df1b315313d2d7a9"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "df1b315313d2d7a9",
+    "type": "switch",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "property": "stateIdx",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "usaStates.length",
+        "vt": "msg"
+      },
+      {
+        "t": "else"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 370,
+    "y": 440,
+    "wires": [
+      [
+        "0135a9e6efd9023d"
+      ],
+      [
+        "e67d5e3cb3d43733"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "d59948f2db24f10b",
+    "type": "change",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "searchTerms",
+        "pt": "msg",
+        "to": "[\"antique\",\"coin\",\"gem\",\"crystal\"]",
+        "tot": "json"
+      },
+      {
+        "t": "set",
+        "p": "queryIdx",
+        "pt": "msg",
+        "to": "0",
+        "tot": "num"
+      },
+      {
+        "t": "set",
+        "p": "stateResults",
+        "pt": "msg",
+        "to": "[]",
+        "tot": "json"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 360,
+    "y": 660,
+    "wires": [
+      [
+        "d789abfd0ce41009"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "cae6fa12b0cf863a",
+    "type": "function",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "func": "const searchTerm = msg.searchTerms[msg.queryIdx]\nmsg.searchTerm = searchTerm\nmsg.searchQuery = `${searchTerm} store in ${msg.state}, USA`\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 720,
+    "y": 720,
+    "wires": [
+      [
+        "60d351d4a7e0adcc"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "d789abfd0ce41009",
+    "type": "switch",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "property": "queryIdx",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "searchTerms.length",
+        "vt": "msg"
+      },
+      {
+        "t": "else"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 570,
+    "y": 660,
+    "wires": [
+      [
+        "6a03daecec3c0713",
+        "b1b18d1d3d0edbbc"
+      ],
+      [
+        "cae6fa12b0cf863a"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "1c831e4cd2a5f80c",
+    "type": "function",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "func": "for (let i = 0; i < msg.locations.length; i++) {\n    if (msg.stateResults.some(shop => shop.address === msg.locations[i].address)) {\n        continue\n    }\n    msg.stateResults.push({\n        ...msg.locations[i],\n        type: msg.searchTerm,\n        state: msg.state\n    })\n}\n\nmsg.queryIdx += 1\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 780,
+    "wires": [
+      [
+        "d789abfd0ce41009"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "6a03daecec3c0713",
+    "type": "function",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "func": "let results = ''\n\nmsg.stateResults.sort((a, b) => {\n    return parseFloat(b.rating) - parseFloat(a.rating)\n})\n\nfor (let i = 0; i < msg.stateResults.length; i++) {\n    const loc = msg.stateResults[i]\n    results += `\"${loc.state}\",\"${loc.type}\",${loc.name}\",\"${loc.rating}\",\"${loc.numReviews}\",\"${loc.address}\",\"${loc.timings}\"\\n`\n}\n\nmsg.resultsFinal = results\nmsg.payload = results\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 860,
+    "y": 620,
+    "wires": [
+      [
+        "4dad27799ccb5f13",
+        "64ec7333929bbd13"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "4dad27799ccb5f13",
+    "type": "file",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "filename": "/Users/dushyant/res.csv",
+    "appendNewline": true,
+    "createDir": true,
+    "overwriteFile": "false",
+    "encoding": "none",
+    "x": 1210,
+    "y": 620,
+    "wires": [
+      []
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "e67d5e3cb3d43733",
+    "type": "function",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "func": "msg.state = msg.usaStates[msg.stateIdx]\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 360,
+    "y": 520,
+    "wires": [
+      [
+        "d59948f2db24f10b"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "b1b18d1d3d0edbbc",
+    "type": "function",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "func": "msg.stateIdx += 1\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 580,
+    "y": 520,
+    "wires": [
+      [
+        "df1b315313d2d7a9"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "0135a9e6efd9023d",
+    "type": "bot-response",
+    "z": "1b88befdab2dfaf6",
+    "name": "bot-response",
+    "status": "success",
+    "statusMsg": "Success!",
+    "statusMsgType": "str",
+    "x": 710,
+    "y": 360,
+    "wires": [],
+    "module": "maya-red-bot-utils",
+    "version": "1.0.1"
+  },
+  {
+    "id": "64ec7333929bbd13",
+    "type": "debug",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 990,
+    "y": 680,
+    "wires": [],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  },
+  {
+    "id": "6d0e4979f9d5298f",
+    "type": "inject",
+    "z": "1b88befdab2dfaf6",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 140,
+    "y": 460,
+    "wires": [
+      [
+        "90f6877cdc7275bf"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6-git"
+  }
+]
