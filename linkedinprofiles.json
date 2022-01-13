@@ -1,0 +1,557 @@
+[
+  {
+    "id": "df90d6791408d3ea",
+    "type": "subflow",
+    "name": "Linkedin : Get List of Name, Title, City, Profile Link",
+    "info": "",
+    "category": "",
+    "in": [
+      {
+        "x": 20,
+        "y": 140,
+        "wires": [
+          {
+            "id": "6004a2c018a64287"
+          }
+        ]
+      }
+    ],
+    "out": [
+      {
+        "x": 460,
+        "y": 80,
+        "wires": [
+          {
+            "id": "90cc7304de51d149",
+            "port": 0
+          }
+        ]
+      }
+    ],
+    "env": [],
+    "meta": {},
+    "color": "#DDAA99",
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "6004a2c018a64287",
+    "type": "maya-browser-query",
+    "z": "df90d6791408d3ea",
+    "name": "Get Profile Details",
+    "options": [
+      {
+        "key": "name",
+        "xpath": "/html/body/div[6]/div[3]/div/div[2]/div/div[1]/main/div/div/div[2]/ul//div/div/div[2]/div[1]/div[1]/div/span[1]/span/a/span/span[1]",
+        "extract": "/text()"
+      },
+      {
+        "key": "title",
+        "xpath": "/html/body/div[6]/div[3]/div/div[2]/div/div[1]/main/div/div/div[2]/ul//div/div/div[2]/div[1]/div[2]/div/div[1]",
+        "extract": "/text()"
+      },
+      {
+        "key": "link",
+        "xpath": "/html/body/div[6]/div[3]/div/div[2]/div/div[1]/main/div/div/div[2]/ul//div/div/div[2]/div[1]/div[1]/div/span[1]/span/a",
+        "extract": "/@href"
+      },
+      {
+        "key": "city",
+        "xpath": "/html/body/div[6]/div[3]/div/div[2]/div/div[1]/main/div/div/div[2]/ul//div/div/div[2]/div[1]/div[2]/div/div[2]",
+        "extract": "/text()"
+      }
+    ],
+    "tabId": "tabs[0].id",
+    "payloadTypeTabId": "msg",
+    "timeout": 5000,
+    "payloadTypeTimeout": "num",
+    "mergeOutputs": false,
+    "x": 190,
+    "y": 140,
+    "wires": [
+      [
+        "90cc7304de51d149"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "90cc7304de51d149",
+    "type": "function",
+    "z": "df90d6791408d3ea",
+    "name": "",
+    "func": "names = msg.result.name \ntitles = msg.result.title.filter(e => e !== \"\")\nlinks = msg.result.link\ncities = msg.result.city.filter(e => e !== \"\")\n\npayloadArray = names.map((item,i)=>{\n    return {\n        name : names[i],\n        title : titles[i],\n        link : links[i],\n        city : cities[i]\n    }\n    \n})\n\nmsg.payload = payloadArray\n\nreturn msg",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 320,
+    "y": 80,
+    "wires": [
+      []
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "13e181a24c675924",
+    "type": "tab",
+    "label": "Linkedin Profile Scraper",
+    "disabled": false,
+    "info": "",
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "88842a79e61d5ed0",
+    "type": "maya-browser-open",
+    "z": "13e181a24c675924",
+    "name": "",
+    "isProfileConfigNode": false,
+    "url": "url",
+    "payloadTypeurl": "msg",
+    "additionalOptions": "{}",
+    "payloadTypeadditionalOptions": "json",
+    "x": 310,
+    "y": 180,
+    "wires": [
+      [
+        "5c8ea2cd197a32e8",
+        "f48cbe3d24e30bef"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "995ac47355f77c21",
+    "type": "bot-command",
+    "z": "13e181a24c675924",
+    "name": "",
+    "order": 0,
+    "options": [
+      {
+        "value": "Search Linkedin for ",
+        "type": "prompt",
+        "required": true
+      },
+      {
+        "value": "query",
+        "type": "string",
+        "required": false
+      },
+      {
+        "value": "and get list",
+        "type": "prompt",
+        "required": false
+      }
+    ],
+    "formValue": {
+      "Search Linkedin for ": "",
+      "query": "",
+      "and get list": ""
+    },
+    "payload": "",
+    "endpointUrl": "/command-995ac47355f77c21",
+    "icon": "",
+    "x": 210,
+    "y": 100,
+    "wires": [
+      [
+        "c709bdc1d73e1d57"
+      ]
+    ],
+    "module": "maya-red-bot-utils",
+    "version": "1.0.1"
+  },
+  {
+    "id": "f48cbe3d24e30bef",
+    "type": "bot-response",
+    "z": "13e181a24c675924",
+    "name": "bot-response",
+    "status": "success",
+    "statusMsg": "Success!",
+    "statusMsgType": "str",
+    "x": 490,
+    "y": 180,
+    "wires": [],
+    "module": "maya-red-bot-utils",
+    "version": "1.0.1"
+  },
+  {
+    "id": "5fbc8367aba99fb9",
+    "type": "debug",
+    "z": "13e181a24c675924",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 870,
+    "y": 140,
+    "wires": [],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "d34fedb1083c6f06",
+    "type": "maya-browser-find-tab",
+    "z": "13e181a24c675924",
+    "name": "",
+    "isProfileConfigNode": false,
+    "query": "{\"url\":\"*://*.linkedin.com/*\"}",
+    "payloadTypequery": "json",
+    "x": 200,
+    "y": 440,
+    "wires": [
+      [
+        "68c2ea0d4b6a234c"
+      ]
+    ],
+    "module": "maya-red-browser-automation",
+    "version": "1.7.1"
+  },
+  {
+    "id": "68c2ea0d4b6a234c",
+    "type": "switch",
+    "z": "13e181a24c675924",
+    "name": "",
+    "property": "tabs.length",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "0",
+        "vt": "num"
+      },
+      {
+        "t": "else"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 330,
+    "y": 480,
+    "wires": [
+      [
+        "d8f9b2143b271ddf"
+      ],
+      [
+        "90a51492c91122ee"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "c7a2b8ea54332145",
+    "type": "bot-command",
+    "z": "13e181a24c675924",
+    "name": "",
+    "order": 0,
+    "options": [
+      {
+        "value": "Get Current Profile List",
+        "type": "prompt",
+        "required": true
+      }
+    ],
+    "formValue": {
+      "Get Current Profile List": ""
+    },
+    "payload": "",
+    "endpointUrl": "/command-c7a2b8ea54332145",
+    "icon": "",
+    "x": 140,
+    "y": 360,
+    "wires": [
+      [
+        "d34fedb1083c6f06"
+      ]
+    ],
+    "module": "maya-red-bot-utils",
+    "version": "1.0.1"
+  },
+  {
+    "id": "6db237be3f925254",
+    "type": "bot-response",
+    "z": "13e181a24c675924",
+    "name": "bot-response",
+    "status": "success",
+    "statusMsg": "Success!",
+    "statusMsgType": "str",
+    "x": 790,
+    "y": 560,
+    "wires": [],
+    "module": "maya-red-bot-utils",
+    "version": "1.0.1"
+  },
+  {
+    "id": "3d889e3dd321eaba",
+    "type": "debug",
+    "z": "13e181a24c675924",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 990,
+    "y": 400,
+    "wires": [],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "c348da77bddc78e7",
+    "type": "inject",
+    "z": "13e181a24c675924",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 130,
+    "y": 520,
+    "wires": [
+      [
+        "d34fedb1083c6f06"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "c709bdc1d73e1d57",
+    "type": "function",
+    "z": "13e181a24c675924",
+    "name": "",
+    "func": "random = 'product manager'\n\nmsg.url = \"https://www.linkedin.com/search/results/people/?keywords=\" + encodeURI(msg.payload.query.value)\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 140,
+    "y": 160,
+    "wires": [
+      [
+        "88842a79e61d5ed0"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "7298abd707fe7697",
+    "type": "gsheet-append",
+    "z": "13e181a24c675924",
+    "name": "<Put Gsheet Details>",
+    "isProfileConfigNode": false,
+    "url": "https://docs.google.com/spreadsheets/d/1_b5c3CI1fFOA9B3YOTBKzj5TKzQULigmUFgvpiEkQK0/edit#gid=0",
+    "payloadTypeurl": "str",
+    "range": "Sheet1!A1:D1",
+    "payloadTyperange": "str",
+    "values": "payload",
+    "payloadTypevalues": "msg",
+    "majorDimension": "ROWS",
+    "valueInputOption": "USER_ENTERED",
+    "insertDataOption": "INSERT_ROWS",
+    "responseValueRenderOption": "FORMATTED_VALUE",
+    "responseDateTimeRenderOption": "FORMATTED_STRING",
+    "x": 920,
+    "y": 280,
+    "wires": [
+      []
+    ],
+    "module": "maya-red-gdrive",
+    "version": "1.2.1"
+  },
+  {
+    "id": "5c8ea2cd197a32e8",
+    "type": "delay",
+    "z": "13e181a24c675924",
+    "name": "Wait for Load",
+    "pauseType": "delay",
+    "timeout": "3",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "x": 350,
+    "y": 240,
+    "wires": [
+      [
+        "968e019fe65c9ced"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "313f146fc409824a",
+    "type": "inject",
+    "z": "13e181a24c675924",
+    "name": "",
+    "props": [
+      {
+        "p": "payload.query.value",
+        "v": "product",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 150,
+    "y": 240,
+    "wires": [
+      [
+        "c709bdc1d73e1d57"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "968e019fe65c9ced",
+    "type": "subflow:df90d6791408d3ea",
+    "z": "13e181a24c675924",
+    "x": 400,
+    "y": 300,
+    "wires": [
+      [
+        "0037c80ef5dcd403"
+      ]
+    ],
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "90a51492c91122ee",
+    "type": "subflow:df90d6791408d3ea",
+    "z": "13e181a24c675924",
+    "x": 600,
+    "y": 480,
+    "wires": [
+      [
+        "3d889e3dd321eaba",
+        "6db237be3f925254",
+        "f21a941ddb83343c"
+      ]
+    ],
+    "module": null,
+    "version": null
+  },
+  {
+    "id": "0037c80ef5dcd403",
+    "type": "function",
+    "z": "13e181a24c675924",
+    "name": "",
+    "func": "newArray = msg.payload.map(item=>{\n    return [item[\"name\"], item[\"title\"], item[\"link\"], item[\"city\"]]\n})\nmsg.payload = newArray\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 680,
+    "y": 220,
+    "wires": [
+      [
+        "5fbc8367aba99fb9",
+        "7298abd707fe7697"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "f21a941ddb83343c",
+    "type": "function",
+    "z": "13e181a24c675924",
+    "name": "",
+    "func": "newArray = msg.payload.map(item=>{\n    return [item[\"name\"], item[\"title\"], item[\"link\"], item[\"city\"]]\n})\nmsg.payload = newArray\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 900,
+    "y": 480,
+    "wires": [
+      [
+        "d04799993eb616d9"
+      ]
+    ],
+    "module": "node-red",
+    "version": "2.0.6"
+  },
+  {
+    "id": "d04799993eb616d9",
+    "type": "gsheet-append",
+    "z": "13e181a24c675924",
+    "name": "<Put Gsheet Details>",
+    "isProfileConfigNode": false,
+    "url": "https://docs.google.com/spreadsheets/d/1_b5c3CI1fFOA9B3YOTBKzj5TKzQULigmUFgvpiEkQK0/edit#gid=0",
+    "payloadTypeurl": "str",
+    "range": "Sheet1!A1:D1",
+    "payloadTyperange": "str",
+    "values": "payload",
+    "payloadTypevalues": "msg",
+    "majorDimension": "ROWS",
+    "valueInputOption": "USER_ENTERED",
+    "insertDataOption": "INSERT_ROWS",
+    "responseValueRenderOption": "FORMATTED_VALUE",
+    "responseDateTimeRenderOption": "FORMATTED_STRING",
+    "x": 920,
+    "y": 520,
+    "wires": [
+      []
+    ],
+    "module": "maya-red-gdrive",
+    "version": "1.2.1"
+  },
+  {
+    "id": "d8f9b2143b271ddf",
+    "type": "bot-response",
+    "z": "13e181a24c675924",
+    "name": "bot-response",
+    "status": "error",
+    "statusMsg": "Could not find Linkedin tab",
+    "statusMsgType": "str",
+    "x": 510,
+    "y": 420,
+    "wires": [],
+    "module": "maya-red-bot-utils",
+    "version": "1.0.1"
+  }
+]
