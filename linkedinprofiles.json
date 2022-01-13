@@ -553,5 +553,31 @@
     "wires": [],
     "module": "maya-red-bot-utils",
     "version": "1.0.1"
+  },
+  {
+    "id": "06dc79004cf8eb99",
+    "type": "bot-info",
+    "z": "13e181a24c675924",
+    "name": "",
+    "title": "Linkedin Profiles Scraper",
+    "description": "Scrape Linkedin profiles based on any search query or from a active Linkedin profiles list page.\n\n * Search Linked for {query} and get list\n * Get Current Profile List\n\nCustomization : Make sure you change the spreadsheet link and range in the `<Put Gsheet Details>` nodes.",
+    "created": "January 13, 2022",
+    "timestamp": 1642091407858,
+    "compatibility": [
+      {
+        "label": "MacOS",
+        "value": "macos"
+      },
+      {
+        "label": "Linux",
+        "value": "linux"
+      }
+    ],
+    "developer": "botdoggy42@gmail.com",
+    "x": 560,
+    "y": 100,
+    "wires": [],
+    "module": "maya-red-bot-utils",
+    "version": "1.0.1"
   }
 ]
